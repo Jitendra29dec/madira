@@ -234,7 +234,7 @@ public class Dashboard_Activity extends AppCompatActivity {
         });*/
 
        /* layoutManager = new GridLayoutManager(this, 6);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL); // set Horizontal Orientation
+        layoutManager.setOrientation(RecyclerView.VERTICAL); // set Horizontal Orientation
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -292,7 +292,7 @@ public class Dashboard_Activity extends AppCompatActivity {
        /* Dash_Recycler.setNestedScrollingEnabled(false);
         Dash_Recycler.setHasFixedSize(false);
         //GridLayoutManager gridLayoutManager = new GridLayoutManager(Dashboard_Activity.this,2);
-        //gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL); // set Horizontal Orientation
+        //gridLayoutManager.setOrientation(RecyclerView.VERTICAL); // set Horizontal Orientation
         Dash_Recycler.setLayoutManager(layoutManager); // set LayoutManager to RecyclerView
         dashboardAdapter = new DashboardAdapter(Dashboard_Activity.this,Dashboard_List);
         Dash_Recycler.setAdapter(dashboardAdapter);*/

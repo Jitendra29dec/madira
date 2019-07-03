@@ -134,7 +134,7 @@ public class FragmentListView extends Fragment {
                 }
 
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
                 Theka_Recycler.setLayoutManager(linearLayoutManager);
                 listAdapter = new ListAdapter(getActivity(),getSortedJobCandidateByAge());
                 Theka_Recycler.setAdapter(listAdapter);

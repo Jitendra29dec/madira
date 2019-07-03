@@ -97,7 +97,7 @@ public class Rate_List_activity extends AppCompatActivity {
                     State_Recycler.setHasFixedSize(true);
                     State_Recycler.setNestedScrollingEnabled(false);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Rate_List_activity.this);
-                    linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
                     State_Recycler.setLayoutManager(linearLayoutManager);
                     stateAdapter = new StateAdapter(Rate_List_activity.this,State_List);
                     State_Recycler.setAdapter(stateAdapter);

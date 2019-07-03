@@ -104,7 +104,7 @@ public class Rate_StateWise_Activity extends AppCompatActivity {
                     Rate_Recycler.setHasFixedSize(true);
                     Rate_Recycler.setNestedScrollingEnabled(false);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Rate_StateWise_Activity.this);
-                    linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
                     Rate_Recycler.setLayoutManager(linearLayoutManager);
                     stateRate_adapter = new StateRate_Adapter(Rate_StateWise_Activity.this,Rate_List);
                     Rate_Recycler.setAdapter(stateRate_adapter);

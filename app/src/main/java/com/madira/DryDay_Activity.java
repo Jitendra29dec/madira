@@ -107,7 +107,7 @@ public class DryDay_Activity extends AppCompatActivity {
                     Dry_day_recycler_Recycler.setHasFixedSize(true);
                     Dry_day_recycler_Recycler.setNestedScrollingEnabled(false);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(DryDay_Activity.this);
-                    linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
                     Dry_day_recycler_Recycler.setLayoutManager(linearLayoutManager);
                     dryDay_adapter = new DryDay_Adapter(DryDay_Activity.this,Dryday_List);
                     Dry_day_recycler_Recycler.setAdapter(dryDay_adapter);
