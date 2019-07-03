@@ -6,14 +6,14 @@
 
     <!-- TODO - add your ad unit Ids -->
     <!-- AdMob ad unit IDs -->
-   <!-- <string name="admob_app_id">ca-app-pub-3514536459808368~7793577425</string>
-         <string name="banner_home_footer">ca-app-pub-3514536459808368/6065987815</string>
-         <string name="interstitial_full_screen">ca-app-pub-3514536459808368/5329105737</string>
-   -->
+    <!-- <string name="admob_app_id">ca-app-pub-3514536459808368~7793577425</string>
+          <string name="banner_home_footer">ca-app-pub-3514536459808368/6065987815</string>
+          <string name="interstitial_full_screen">ca-app-pub-3514536459808368/5329105737</string>
+    -->
 
-     <string name="admob_app_id">ca-app-pub-6237205036828311~9575893921</string>
+    <string name="admob_app_id">ca-app-pub-6237205036828311~9575893921</string>
     <string name="banner_home_footer">ca-app-pub-6237205036828311/7243521855</string>
     <string name="interstitial_full_screen">ca-app-pub-6237205036828311/2757126714</string>
     <string name="map_add">ca-app-pub-6237205036828311/1228121307</string>
-
+    <string name="current_app_version">1</string>
 </resources>

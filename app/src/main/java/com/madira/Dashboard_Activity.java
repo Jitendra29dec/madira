@@ -1,12 +1,17 @@
 package com.madira;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -28,6 +33,8 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -45,7 +52,7 @@ public class Dashboard_Activity extends AppCompatActivity {
     DBHelper dbHelper;
     InterstitialAd mInterstitialAd;
     RelativeLayout WineShops, Bars, Restaurants, RateList, DryDays;
-    String IsShowRate="0";
+    String IsShowRate = "0";
     ConnectionDetector cd;
     AdView mAdView;
     private static final Random rand = new Random();
@@ -54,7 +61,7 @@ public class Dashboard_Activity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        dbHelper= new DBHelper(Dashboard_Activity.this);
+        dbHelper = new DBHelper(Dashboard_Activity.this);
         cd = new ConnectionDetector(Dashboard_Activity.this);
         //Dash_Recycler= findViewById(R.id.dash_recycler);
         Notifi = findViewById(R.id.notification);
@@ -67,17 +74,19 @@ public class Dashboard_Activity extends AppCompatActivity {
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitial_full_screen));
 
-        if(dbHelper.getFieldValueUser("enable_disable")!=null){
-            if(dbHelper.getFieldValueUser("enable_disable").equalsIgnoreCase("enable")){
+
+        if (dbHelper.getFieldValueUser("enable_disable") != null) {
+            if (dbHelper.getFieldValueUser("enable_disable").equalsIgnoreCase("enable")) {
                 Enable_Disable.setImageResource(R.drawable.success);
-             if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
-                 Log.e( "onCreate: ","Ente23r" );
-                startForegroundService(new Intent(this, GPSTracker.class));
-                startForegroundService(new Intent(this, MonitorService.class));
-             }else{
-                startService(new Intent(getApplicationContext(), GPSTracker.class));
-                startService(new Intent(getApplicationContext(), MonitorService.class));
-            }}else{
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    Log.e("onCreate: ", "Ente23r");
+                    startForegroundService(new Intent(this, GPSTracker.class));
+                    startForegroundService(new Intent(this, MonitorService.class));
+                } else {
+                    startService(new Intent(getApplicationContext(), GPSTracker.class));
+                    startService(new Intent(getApplicationContext(), MonitorService.class));
+                }
+            } else {
                 Enable_Disable.setImageResource(R.drawable.fail);
                 stopService(new Intent(getApplicationContext(), GPSTracker.class));
                 stopService(new Intent(getApplicationContext(), MonitorService.class));
@@ -94,10 +103,11 @@ public class Dashboard_Activity extends AppCompatActivity {
         });
 
 
-        if(cd.isConnectingToInternet()){
+        if (cd.isConnectingToInternet()) {
             new CheckvMenu().execute();
-        }
+            new updateCheck().execute();
 
+        }
 
 
         mAdView = (AdView) findViewById(R.id.adView);
@@ -114,14 +124,15 @@ public class Dashboard_Activity extends AppCompatActivity {
         mAdView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                Log.e( "onAdLoaded: ", "loaded");
+                Log.e("onAdLoaded: ", "loaded");
                 // Code to be executed when an ad finishes loading.
             }
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 // Code to be executed when an ad request fails.
-                Log.e("onAdFailedToLoad: ","fai" );            }
+                Log.e("onAdFailedToLoad: ", "fai");
+            }
 
             @Override
             public void onAdOpened() {
@@ -145,8 +156,8 @@ public class Dashboard_Activity extends AppCompatActivity {
 
         // set the ad unit ID
         //mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen));
-        int randInt = rand.nextInt(100)+1;
-        if(randInt % 2 == 0){
+        int randInt = rand.nextInt(100) + 1;
+        if (randInt % 2 == 0) {
             AdRequest adRequest = new AdRequest.Builder()
                     //.addTestDevice("2695850186D664EAA4DFBCC30CB38F8C")
                     .build();
@@ -162,13 +173,11 @@ public class Dashboard_Activity extends AppCompatActivity {
         }
 
 
-
-
         WineShops.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i  = new Intent(Dashboard_Activity.this, MapList_Activity.class);
-                dbHelper.insertFielduser("type","liquor_store");
+                Intent i = new Intent(Dashboard_Activity.this, MapList_Activity.class);
+                dbHelper.insertFielduser("type", "liquor_store");
                 startActivity(i);
             }
         });
@@ -177,8 +186,8 @@ public class Dashboard_Activity extends AppCompatActivity {
         Bars.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i  = new Intent(Dashboard_Activity.this, MapList_Activity.class);
-                dbHelper.insertFielduser("type","bar");
+                Intent i = new Intent(Dashboard_Activity.this, MapList_Activity.class);
+                dbHelper.insertFielduser("type", "bar");
                 startActivity(i);
             }
         });
@@ -186,8 +195,8 @@ public class Dashboard_Activity extends AppCompatActivity {
         Restaurants.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i  = new Intent(Dashboard_Activity.this, MapList_Activity.class);
-                dbHelper.insertFielduser("type","restaurant");
+                Intent i = new Intent(Dashboard_Activity.this, MapList_Activity.class);
+                dbHelper.insertFielduser("type", "restaurant");
                 startActivity(i);
             }
         });
@@ -196,7 +205,7 @@ public class Dashboard_Activity extends AppCompatActivity {
         RateList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i  = new Intent(Dashboard_Activity.this, Rate_List_activity.class);
+                Intent i = new Intent(Dashboard_Activity.this, Rate_List_activity.class);
                 startActivity(i);
             }
         });
@@ -205,7 +214,7 @@ public class Dashboard_Activity extends AppCompatActivity {
         DryDays.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i  = new Intent(Dashboard_Activity.this, DryDay_Activity.class);
+                Intent i = new Intent(Dashboard_Activity.this, DryDay_Activity.class);
                 startActivity(i);
             }
         });
@@ -255,33 +264,34 @@ public class Dashboard_Activity extends AppCompatActivity {
         });
 
         GetDashList();
-*/    }
+*/
+    }
 
 
-    public void GetDashList(){
+    public void GetDashList() {
         //Dashboard_List= new ArrayList<DashboardModel>();
-        for(int i = 0; i<5; i++){
+        for (int i = 0; i < 5; i++) {
             DashboardModel list = new DashboardModel();
-            if(i==0){
+            if (i == 0) {
                 list.setProfile_Img("https://www.motherearthbrewco.com/wp-content/uploads/2017/03/4S_Spring_2018_BottleGlass_800x1040-788x1024.png");
                 list.setProfile_text("Wine Shops");
             }
 
-            if(i==1){
+            if (i == 1) {
                 list.setProfile_Img("https://www.motherearthbrewco.com/wp-content/uploads/2017/03/4S_Spring_2018_BottleGlass_800x1040-788x1024.png");
                 list.setProfile_text("Bars");
             }
 
-            if(i==2){
+            if (i == 2) {
                 list.setProfile_Img("https://www.motherearthbrewco.com/wp-content/uploads/2017/03/4S_Spring_2018_BottleGlass_800x1040-788x1024.png");
                 list.setProfile_text("Drydays List");
             }
 
-            if(i==3){
+            if (i == 3) {
                 list.setProfile_Img("https://www.motherearthbrewco.com/wp-content/uploads/2017/03/4S_Spring_2018_BottleGlass_800x1040-788x1024.png");
                 list.setProfile_text("Rate List");
             }
-            if(i==4){
+            if (i == 4) {
                 list.setProfile_Img("https://www.motherearthbrewco.com/wp-content/uploads/2017/03/4S_Spring_2018_BottleGlass_800x1040-788x1024.png");
                 list.setProfile_text("Restaurants");
             }
@@ -300,34 +310,34 @@ public class Dashboard_Activity extends AppCompatActivity {
     }
 
 
-    public void Enable_Disable_Notification(){
+    public void Enable_Disable_Notification() {
 
-        if(mBottomSheetDialog!=null){
-            if(mBottomSheetDialog.isShowing()){
+        if (mBottomSheetDialog != null) {
+            if (mBottomSheetDialog.isShowing()) {
                 mBottomSheetDialog.dismiss();
             }
         }
-        View view = getLayoutInflater ().inflate (R.layout.popup_notification_enable_disable, null);
+        View view = getLayoutInflater().inflate(R.layout.popup_notification_enable_disable, null);
         mBottomSheetDialog = new Dialog(Dashboard_Activity.this, R.style.MaterialDialogSheet);
-        mBottomSheetDialog.setContentView (view);
-        mBottomSheetDialog.setCanceledOnTouchOutside (false);
-        mBottomSheetDialog.setCancelable (false);
-        mBottomSheetDialog.getWindow ().setLayout (LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        mBottomSheetDialog.getWindow ().setGravity (Gravity.CENTER);
-        mBottomSheetDialog.show ();
+        mBottomSheetDialog.setContentView(view);
+        mBottomSheetDialog.setCanceledOnTouchOutside(false);
+        mBottomSheetDialog.setCancelable(false);
+        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.getWindow().setGravity(Gravity.CENTER);
+        mBottomSheetDialog.show();
 
         ImageView ImageResponse = mBottomSheetDialog.findViewById(R.id.response_img);
         TextView Response = mBottomSheetDialog.findViewById(R.id.response_txt);
         Button Ok = mBottomSheetDialog.findViewById(R.id.button_response);
 
 
-        if(dbHelper.getFieldValueUser("enable_disable")!=null) {
+        if (dbHelper.getFieldValueUser("enable_disable") != null) {
             if (dbHelper.getFieldValueUser("enable_disable").equalsIgnoreCase("enable")) {
                 Response.setText(this.getResources().getString(R.string.disable_notification));
-            }else{
+            } else {
                 Response.setText(this.getResources().getString(R.string.enable_notification));
             }
-        }else{
+        } else {
             Response.setText(this.getResources().getString(R.string.enable_notification));
         }
 
@@ -343,29 +353,29 @@ public class Dashboard_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mBottomSheetDialog.dismiss();
-                if(dbHelper.getFieldValueUser("enable_disable")!=null){
-                    if(dbHelper.getFieldValueUser("enable_disable").equalsIgnoreCase("enable")){
-                        dbHelper.insertFielduser("enable_disable","disable");
+                if (dbHelper.getFieldValueUser("enable_disable") != null) {
+                    if (dbHelper.getFieldValueUser("enable_disable").equalsIgnoreCase("enable")) {
+                        dbHelper.insertFielduser("enable_disable", "disable");
                         Enable_Disable.setImageResource(R.drawable.fail);
                         stopService(new Intent(getApplicationContext(), GPSTracker.class));
                         stopService(new Intent(getApplicationContext(), MonitorService.class));
-                    }else{
-                        dbHelper.insertFielduser("enable_disable","enable");
+                    } else {
+                        dbHelper.insertFielduser("enable_disable", "enable");
                         Enable_Disable.setImageResource(R.drawable.success);
-                        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O) {
-                            Log.e( "startservice: ","servicst" );
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            Log.e("startservice: ", "servicst");
 
                             startForegroundService(new Intent(Dashboard_Activity.this, GPSTracker.class));
                             startForegroundService(new Intent(Dashboard_Activity.this, MonitorService.class));
 
 
-                        }else {
+                        } else {
                             startService(new Intent(getApplicationContext(), GPSTracker.class));
                             startService(new Intent(getApplicationContext(), MonitorService.class));
                         }
                     }
-                }else{
-                    dbHelper.insertFielduser("enable_disable","enable");
+                } else {
+                    dbHelper.insertFielduser("enable_disable", "enable");
                     Enable_Disable.setImageResource(R.drawable.success);
                     startService(new Intent(getApplicationContext(), GPSTracker.class));
                     startService(new Intent(getApplicationContext(), MonitorService.class));
@@ -383,7 +393,7 @@ public class Dashboard_Activity extends AppCompatActivity {
     }
 
 
-    public class CheckvMenu extends AsyncTask<String, Void, String>{
+    public class CheckvMenu extends AsyncTask<String, Void, String> {
         String resultServer;
         ProgressDialogFragment pd;
 
@@ -399,20 +409,20 @@ public class Dashboard_Activity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             ServiceHandler sh = new ServiceHandler();
             HashMap<String, String> args1 = new HashMap<>();
-            args1.put("","");
+            args1.put("", "");
 
 
-            resultServer = sh.makePostCall("http://13.234.125.210/madira/api/index.php/Menus/menulist",args1);
-            try{
+            resultServer = sh.makePostCall("http://13.234.125.210/madira/api/index.php/Menus/menulist", args1);
+            try {
                 JSONArray HomeArray = new JSONArray(resultServer);
-                for(int i = 0;  i<HomeArray.length(); i++){
-                    if(HomeArray.getJSONObject(i).getString("name").equalsIgnoreCase("Rate List")){
+                for (int i = 0; i < HomeArray.length(); i++) {
+                    if (HomeArray.getJSONObject(i).getString("name").equalsIgnoreCase("Rate List")) {
                         IsShowRate = HomeArray.getJSONObject(i).getString("is_active");
                     }
 
                 }
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
@@ -426,11 +436,77 @@ public class Dashboard_Activity extends AppCompatActivity {
                     pd.dismiss();
                 }*/
 
-                if(IsShowRate.equalsIgnoreCase("1")){
+                if (IsShowRate.equalsIgnoreCase("1")) {
                     RateList.setVisibility(View.VISIBLE);
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
+            }
+
+        }
+    }
+
+    public class updateCheck extends AsyncTask<String, Void, String> {
+        String resultServer;
+        ProgressDialogFragment pd;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+          /*  pd = new ProgressDialogFragment(Dashboard_Activity.this);
+            pd.setCancelable(false);
+            pd.show();*/
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            ServiceHandler sh = new ServiceHandler();
+            HashMap<String, String> args1 = new HashMap<>();
+            args1.put("", "");
+            String version = null;
+
+            resultServer = sh.makePostCall("http://13.234.125.210/madira/api/index.php/Updates/version", args1);
+            try {
+                JSONObject object = new JSONObject(resultServer);
+                if (object.getString("status").equalsIgnoreCase("1")) {
+                    JSONObject vers = new JSONObject(object.getString("result"));
+                    version = vers.getString("version");
+                    Log.e("doInBackground: ", version);
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return version;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            int currrentVersion = Integer.parseInt(getResources().getString(R.string.current_app_version));
+            int versionToCheck = Integer.parseInt(s);
+            if(currrentVersion<versionToCheck){
+                final AlertDialog dialog = new AlertDialog.Builder(Dashboard_Activity.this).create();
+                dialog.setTitle("New Update");
+                dialog.setMessage("The new version of Madira is available now press  Update to enjoy latest features or you can update it later.");
+                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Later", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialog.dismiss();
+                    }
+
+                });
+                dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Update", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + "com.softizon.madira")));
+                        } catch (android.content.ActivityNotFoundException anfe) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + "com.softizon.madira")));
+                        }
+                    }
+                });
+                dialog.show();
             }
 
         }
