@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:id="@+id/line"
+        android:background="@android:color/transparent"/>
+
+   <!-- <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:elevation="4dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/response_img"
+        android:src="@drawable/success"/>-->
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="0dp"
+    android:background="@drawable/popup_view">
+
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true"
+        android:elevation="4dp"
+        android:scaleType="fitXY"
+        android:layout_marginTop="2dp"
+        android:id="@+id/response_img"
+        android:src="@drawable/fail"/>
+
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:layout_centerHorizontal="true"
+    android:layout_below="@+id/response_img"
+    android:id="@+id/response_txt"
+    android:gravity="center"
+    android:text="Success"
+    android:textSize="28dp"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/colorRed"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/response_txt"
+        android:id="@+id/note_txt"
+        android:gravity="center"
+        android:text="@string/note_txt"
+        android:textSize="16dp"/>
+
+
+
+
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@drawable/button_view"
+        android:layout_below="@+id/note_txt"
+        android:text="OK"
+        android:id="@+id/button_response"
+        android:textColor="@color/colorWhite"
+        android:textSize="16dp"
+        android:layout_margin="25dp"/>
+
+</RelativeLayout>
+
+
+
+
+
+
+</RelativeLayout>
